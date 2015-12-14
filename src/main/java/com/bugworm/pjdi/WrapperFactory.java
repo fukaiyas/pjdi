@@ -5,6 +5,7 @@ import com.sun.jdi.VirtualMachine;
 import com.sun.jdi.VirtualMachineManager;
 import com.sun.jdi.connect.AttachingConnector;
 import com.sun.jdi.connect.Connector;
+import com.sun.jdi.connect.LaunchingConnector;
 import com.sun.jdi.connect.ListeningConnector;
 
 import java.util.Map;
@@ -15,17 +16,27 @@ import java.util.Map;
 public class WrapperFactory {
 
     private final VirtualMachineManager manager;
+    private final boolean suspendMode;
 
     public static WrapperFactory newInstance(){
         return new WrapperFactory();
     }
 
+    public static WrapperFactory newInstance(boolean suspend){
+        return new WrapperFactory();
+    }
+
     public WrapperFactory(){
-        this(Bootstrap.virtualMachineManager());
+        this(Bootstrap.virtualMachineManager(), false);
     }
 
     public WrapperFactory(VirtualMachineManager vmm){
+        this(vmm, false);
+    }
+
+    public WrapperFactory(VirtualMachineManager vmm, boolean suspend){
         manager = vmm;
+        suspendMode = suspend;
     }
 
     /**
@@ -52,6 +63,7 @@ public class WrapperFactory {
 
         Map<String, Connector.Argument> map = connector.defaultArguments();
         map.get("port").setValue(String.valueOf(port));
+        map.get("suspend").setValue(String.valueOf(suspendMode));
         try{
             VirtualMachine vm = connector.accept(map);
             return new VirtualMachineWrapper(vm);
@@ -87,6 +99,7 @@ public class WrapperFactory {
         Map<String, Connector.Argument> map = connector.defaultArguments();
         map.get("hostname").setValue(hostname);
         map.get("port").setValue(String.valueOf(port));
+        map.get("suspend").setValue(String.valueOf(suspendMode));
         try{
             VirtualMachine vm = connector.attach(map);
             return new VirtualMachineWrapper(vm);
@@ -94,6 +107,39 @@ public class WrapperFactory {
             throw new PjdiException("Attach failed.", e);
         }
     }
-    //TODO
-    //launch
+
+    /**
+     * Launches an application with system classpath, connects to its VM and returns a VirtualMachineWrapper object.
+     * @param className main class name
+     * @return VirtualMachineWrapper
+     */
+    public VirtualMachineWrapper launch(String className){
+        return launch(className, "");//TODO システムのクラスパスを指定して実行する
+
+    }
+
+    /**
+     * Launches an application, connects to its VM and returns a VirtualMachineWrapper object.
+     * @param className main class name
+     * @param options options (require to include classpath)
+     * @return VirtualMachineWrapper
+     */
+    public VirtualMachineWrapper launch(String className, String options){
+        //TODO 引数も指定できるはず
+        //TODO LaunchingConnectorの場合に名前指定のメソッド必要か？
+
+        LaunchingConnector connector = manager.defaultConnector();
+        Map<String, Connector.Argument> map = connector.defaultArguments();
+        map.get("main").setValue(className);
+        map.get("options").setValue(options);
+        map.get("suspend").setValue(String.valueOf(suspendMode));
+        try{
+            VirtualMachine vm = connector.launch(map);
+            //TODO System.outとSystem.errはリダイレクトできるようにしたい
+            //TODO VirtualMachineWrapperに持たせるか？
+            return new VirtualMachineWrapper(vm);
+        }catch(Exception e){
+            throw new PjdiException("Launch failed.", e);
+        }
+    }
 }
