@@ -26,14 +26,26 @@ public class WrapperFactory {
         return new WrapperFactory();
     }
 
+    /**
+     * Use Bootstrap.virtualMachineManager() and set suspend property true.
+     */
     public WrapperFactory(){
-        this(Bootstrap.virtualMachineManager(), false);
+        this(Bootstrap.virtualMachineManager(), true);
     }
 
+    /**
+     * Use specified VirtualMachineManager and set suspend property true.
+     * @param vmm VirtualMachineManager
+     */
     public WrapperFactory(VirtualMachineManager vmm){
-        this(vmm, false);
+        this(vmm, true);
     }
 
+    /**
+     * Use specified VirtualMachineManager and suspend property.
+     * @param vmm VirtualMachineManager
+     * @param suspend Suspend property
+     */
     public WrapperFactory(VirtualMachineManager vmm, boolean suspend){
         manager = vmm;
         suspendMode = suspend;
