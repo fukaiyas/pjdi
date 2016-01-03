@@ -69,7 +69,7 @@ public class ListeningConnectorWrapperBuilder extends WrapperBuilder<ListeningCo
     }
 
     /**
-     * Waits for a target VM to attach and return VirtualMachineWrapper object.
+     * Waits for a target VM to attach and returns VirtualMachineWrapper object.
      * @return VirtualMachineWrapper object
      */
     public VirtualMachineWrapper accept(){
