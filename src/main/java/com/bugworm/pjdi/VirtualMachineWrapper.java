@@ -12,8 +12,13 @@ import java.util.Map;
  */
 public class VirtualMachineWrapper implements VirtualMachine {
 
+    /** VirtualMachine object */
     private final VirtualMachine virtualMachine;
 
+    /**
+     * Constructs a VirtualMachineWrapper with the specified VirtualMachine object.
+     * @param vm
+     */
     public VirtualMachineWrapper(VirtualMachine vm){
         virtualMachine = vm;
     }
