@@ -12,11 +12,10 @@ public abstract class WrapperBuilder<T extends WrapperBuilder<T>>{
     /** VirtualMachineManager object */
     protected final VirtualMachineManager manager;
 
-    /** Whether to suspend when target VM started */
-    protected Optional<Boolean> suspendMode = Optional.empty();
-
     /** Name for selecting Connector */
-    protected Optional<String> name = Optional.empty();
+    protected Optional<String> connectorName = Optional.empty();
+
+    //TODO Map<String, String>を持っておいて(Map<String, Optional<String>>かも)、任意のプロパティを設定可能にしておくか？
 
     /**
      * Factory method for ListeningConnectorWrapperBuilder with default VirtualMachineManager object.
@@ -24,6 +23,22 @@ public abstract class WrapperBuilder<T extends WrapperBuilder<T>>{
      */
     public static ListeningConnectorWrapperBuilder withListeningConnector(){
         return new ListeningConnectorWrapperBuilder();
+    }
+
+    /**
+     * Factory method for AttachingConnectorWrapperBuider with default VirtualMachineManager object.
+     * @return AttachingConnectorWrapperBuider object
+     */
+    public static AttachingConnectorWrapperBuider withAttachingConnector(){
+        return new AttachingConnectorWrapperBuider();
+    }
+
+    /**
+     * Factory method for LaunchingConnectorWrapperBuilder with default VirtualMachineManager object.
+     * @return LaunchingConnectorWrapperBuilder object
+     */
+    public static LaunchingConnectorWrapperBuilder withLaunchingConnector(){
+        return new LaunchingConnectorWrapperBuilder();
     }
 
     /**
@@ -35,12 +50,12 @@ public abstract class WrapperBuilder<T extends WrapperBuilder<T>>{
     }
 
     /**
-     * Sets the suspend property.
-     * @param suspend Whether to suspend when target VM started
+     * Sets the connector's name to select.
+     * @param name Connector's name
      * @return This instance
      */
-    public T suspend(boolean suspend){
-        suspendMode = Optional.of(suspend);
+    public T connectorName(String name){
+        connectorName = Optional.of(name);
         return (T)this;
     }
 }

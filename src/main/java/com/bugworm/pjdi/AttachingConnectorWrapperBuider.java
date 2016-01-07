@@ -75,13 +75,12 @@ public class AttachingConnectorWrapperBuider extends WrapperBuilder<AttachingCon
     public VirtualMachineWrapper attach(){
 
         AttachingConnector connector = manager.attachingConnectors().stream()
-                .filter(ac -> ac.name().equals(name.orElse("com.sun.jdi.SocketAttach")))
+                .filter(ac -> ac.name().equals(connectorName.orElse("com.sun.jdi.SocketAttach")))
                 .findAny()
                 .orElseThrow(() -> new PjdiException("Can't find AttachingConnector."));
 
         Map<String, Connector.Argument> map = connector.defaultArguments();
         attachingPort.ifPresent(p -> map.get("port").setValue(String.valueOf(p)));
-        suspendMode.ifPresent(s -> map.get("suspend").setValue(String.valueOf(s)));
         timeout.ifPresent(t -> map.get("timeout").setValue(String.valueOf(t)));
         hostname.ifPresent(l -> map.get("hostname").setValue(l));
 

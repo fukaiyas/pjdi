@@ -75,13 +75,12 @@ public class ListeningConnectorWrapperBuilder extends WrapperBuilder<ListeningCo
     public VirtualMachineWrapper accept(){
 
         ListeningConnector connector = manager.listeningConnectors().stream()
-                .filter(lc -> lc.name().equals(name.orElse("com.sun.jdi.SocketListen")))
+                .filter(lc -> lc.name().equals(connectorName.orElse("com.sun.jdi.SocketListen")))
                 .findAny()
                 .orElseThrow(() -> new PjdiException("Can't find ListeningConnector."));
 
         Map<String, Connector.Argument> map = connector.defaultArguments();
         listeningPort.ifPresent(p -> map.get("port").setValue(String.valueOf(p)));
-        suspendMode.ifPresent(s -> map.get("suspend").setValue(String.valueOf(s)));
         timeout.ifPresent(t -> map.get("timeout").setValue(String.valueOf(t)));
         localAdress.ifPresent(l -> map.get("localAddress").setValue(l));
 
