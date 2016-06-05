@@ -6,6 +6,8 @@ import com.sun.jdi.request.EventRequestManager;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
  * Wrapper for com.sun.jdi.VirtualMachine.
@@ -15,6 +17,8 @@ public class VirtualMachineWrapper implements VirtualMachine {
     /** VirtualMachine object */
     private final VirtualMachine virtualMachine;
 
+    private ExecutorService executorService;
+
     /**
      * Constructs a VirtualMachineWrapper with the specified VirtualMachine object.
      * @param vm
@@ -23,8 +27,13 @@ public class VirtualMachineWrapper implements VirtualMachine {
         virtualMachine = vm;
     }
 
+    public ExecutorService getExecutorService(){
+        return executorService;
+    }
 
-
+    public void setExecutorService(ExecutorService es){
+        executorService = es;
+    }
 
 
     //-------- Delegation -------

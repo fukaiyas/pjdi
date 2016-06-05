@@ -7,6 +7,8 @@ import com.sun.jdi.connect.LaunchingConnector;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Builder class for VirtualMachineWrapper by LaunchingConnector.
@@ -128,10 +130,14 @@ public class LaunchingConnectorWrapperBuilder extends WrapperBuilder<LaunchingCo
         quote.ifPresent(q -> map.get("quote").setValue(q));
         vmexec.ifPresent(v -> map.get("vmexec").setValue(v));
 
-        //TODO System.outとSystem.errの扱い
-
+        ExecutorService es = Executors.newFixedThreadPool(2);
         try{
-            return new VirtualMachineWrapper(connector.launch(map));
+            VirtualMachineWrapper wrapper = new VirtualMachineWrapper(connector.launch(map));
+            wrapper.setExecutorService(es);
+            Process pr = wrapper.process();
+            es.execute(new InputStream2PrintStream(pr.getInputStream(), System.out));
+            es.execute(new InputStream2PrintStream(pr.getErrorStream(), System.err));
+            return wrapper;
         }catch(Exception e){
             throw new PjdiException("Accept failed.", e);
         }
