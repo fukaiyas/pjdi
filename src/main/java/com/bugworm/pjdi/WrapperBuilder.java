@@ -29,8 +29,8 @@ public abstract class WrapperBuilder<T extends WrapperBuilder<T>>{
      * Factory method for AttachingConnectorWrapperBuider with default VirtualMachineManager object.
      * @return AttachingConnectorWrapperBuider object
      */
-    public static AttachingConnectorWrapperBuider withAttachingConnector(){
-        return new AttachingConnectorWrapperBuider();
+    public static AttachingConnectorWrapperBuilder withAttachingConnector(){
+        return new AttachingConnectorWrapperBuilder();
     }
 
     /**

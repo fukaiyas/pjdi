@@ -12,7 +12,7 @@ import java.util.OptionalInt;
 /**
  * Builder class for VirtualMachineWrapper by AttachingConnector,
  */
-public class AttachingConnectorWrapperBuider extends WrapperBuilder<AttachingConnectorWrapperBuider>{
+public class AttachingConnectorWrapperBuilder extends WrapperBuilder<AttachingConnectorWrapperBuilder>{
 
     /** Port number */
     protected OptionalInt attachingPort = OptionalInt.empty();
@@ -24,17 +24,17 @@ public class AttachingConnectorWrapperBuider extends WrapperBuilder<AttachingCon
     protected Optional<String> hostname = Optional.empty();
 
     /**
-     * Constructs a AttachingConnectorWrapperBuider with default VirtualMachineManager object.
+     * Constructs a AttachingConnectorWrapperBuilder with default VirtualMachineManager object.
      */
-    public AttachingConnectorWrapperBuider(){
+    public AttachingConnectorWrapperBuilder(){
         this(Bootstrap.virtualMachineManager());
     }
 
     /**
-     * Constructs a AttachingConnectorWrapperBuider with the specified VirtualMachineManager object.
+     * Constructs a AttachingConnectorWrapperBuilder with the specified VirtualMachineManager object.
      * @param vmm VirtualMachineManager object
      */
-    public AttachingConnectorWrapperBuider(VirtualMachineManager vmm){
+    public AttachingConnectorWrapperBuilder(VirtualMachineManager vmm){
         super(vmm);
     }
 
@@ -43,7 +43,7 @@ public class AttachingConnectorWrapperBuider extends WrapperBuilder<AttachingCon
      * @param port Port number
      * @return This instance
      */
-    public AttachingConnectorWrapperBuider port(int port){
+    public AttachingConnectorWrapperBuilder port(int port){
         attachingPort = OptionalInt.of(port);
         return this;
     }
@@ -53,7 +53,7 @@ public class AttachingConnectorWrapperBuider extends WrapperBuilder<AttachingCon
      * @param time Timeout(ms)
      * @return This instance
      */
-    public AttachingConnectorWrapperBuider timeout(int time){
+    public AttachingConnectorWrapperBuilder timeout(int time){
         timeout = OptionalInt.of(time);
         return this;
     }
@@ -63,7 +63,7 @@ public class AttachingConnectorWrapperBuider extends WrapperBuilder<AttachingCon
      * @param host Hostname
      * @return This instance
      */
-    public AttachingConnectorWrapperBuider localAddress(String host){
+    public AttachingConnectorWrapperBuilder localAddress(String host){
         hostname = Optional.of(host);
         return this;
     }
